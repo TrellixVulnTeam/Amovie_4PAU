@@ -1,4 +1,6 @@
 ﻿using Behaviour;
+using Behaviour.Interfaces;
+using Behaviour.Services;
 
 namespace Amovie.Configuration
 {
@@ -6,7 +8,8 @@ namespace Amovie.Configuration
     {
         public static IServiceCollection RegisterControllers(this IServiceCollection services)
         {
-            services.AddScoped<IMovieBehavior, MovieBehavior>();
+            services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<INewsService, NewsService>();
             return services;
         }
     }

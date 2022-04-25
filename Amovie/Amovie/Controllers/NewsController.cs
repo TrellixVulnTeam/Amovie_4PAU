@@ -1,7 +1,7 @@
-﻿using Amovie.Data;
-using Amovie.Models;
+﻿using Amovie.Models.NewsDto;
+using Behaviour.Interfaces;
+using Entities.Models.NewsDto;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Amovie.Controllers
 {
@@ -9,94 +9,52 @@ namespace Amovie.Controllers
     [ApiController]
     public class NewsController : ControllerBase
     {
-        private readonly DataContext _context;
-
-        public NewsController(DataContext context)
+        private readonly INewsService _newsService;
+        public NewsController(INewsService newsService)
         {
-            _context = context;
+            _newsService = newsService;
         }
 
         //Get all News
         [HttpGet("allnews")]
-        public async Task<ActionResult<List<News>>> Get()
+        public async Task<ActionResult<List<GetNewsDto>>> Get()
         {
-            var news = await _context.News.ToListAsync();
-            var authors = await _context.Authors.ToListAsync();
-
-            var allNews = from n in news
-                          join a in authors
-                          on n.Author.AuthorId equals a.AuthorId
-                          select new
-                          {
-                              Content = n.Content,
-                              Date = n.Date,
-                              Image = n.Image,
-                              Title = n.Title,
-                              Author = a.FirstName + " " + a.LastName
-                          };
-            return Ok(allNews);
+            return await _newsService.GetNews();
         }
 
-        //Get last 3 Movies
+        //Get last 3 News
         [HttpGet("lastnews")]
-        public async Task<ActionResult<List<NewsModel>>> GetLast()
+        public async Task<ActionResult<List<GetNewsDto>>> GetLast()
         {
-            //List<NewsModel> newsList = new List<NewsModel>();
-
-            //var lastNews = await _context.News
-            //    .Include(a => a.Author)
-            //    .Skip(Math
-            //    .Max(0, _context.News
-            //    .Count() - 3))
-            //    .ToListAsync();
-
-            //var authors = await _context.Authors.ToListAsync();
-
-            //foreach (var item in lastNews)
-            //{
-            //    var newsResult = new NewsModel
-            //    {
-                      //NewsId = x.NewsId,
-            //        Content = item.Content,
-            //        Date = item.Date,
-            //        Image = item.Image,
-            //        Title = item.Title,
-            //        Author = item.Author.FirstName + " " + item.Author.LastName
-            //    };
-            //    newsList.Add(newsResult);
-            //}
-
-            var latestNews = await _context.News.Include(a => a.Author).Select(x => new NewsModel
-            {
-                NewsId = x.NewsId,
-                Content = x.Content,
-                Date = x.Date,
-                Image = x.Image,
-                Title = x.Title,
-                Author = x.Author.FirstName + " " + x.Author.LastName
-            }).Skip(Math
-                .Max(0, _context.News
-                .Count() - 3))
-                .ToListAsync();
-
-            return Ok(latestNews);
+            return await _newsService.GetLast();
         }
 
 
         //Get News by ID
         [HttpGet("{id}")]
-        public async Task<ActionResult<News>> GetNews(int id)
+        public async Task<ActionResult<GetNewsDto>> GetNews(int id)
         {
-            var news = await _context.News.FindAsync(id);
+            return await _newsService.GetSingleNews(id); 
+        }
 
-            if (news == null)
-            {
-                return BadRequest("News not found!");
-            }
-            else
-            {
-                return Ok(news);
-            }
+        //Add News
+        [HttpPost]
+        public async Task Add(AddNewsDto news)
+        {
+            await _newsService.AddNews(news);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task Delete(int id)
+        {
+            await _newsService.DeleteNews(id);
+        }
+
+        //Update News
+        [HttpPut("{id}")]
+        public async Task Update(UpdateNewsDto news, int id)
+        {
+            await _newsService.UpdateNews(news, id);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Amovie.Models;
+using DataSeed;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -19,7 +20,10 @@ namespace Amovie.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(DataContext)));
-        }
 
+            modelBuilder.SeedActors();
+            modelBuilder.SeedGenres();
+            modelBuilder.SeedAuthors();
+        }
     }
 }

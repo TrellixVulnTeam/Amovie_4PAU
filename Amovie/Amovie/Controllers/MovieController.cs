@@ -1,6 +1,6 @@
-﻿using Amovie.Data;
-using Amovie.Models;
-using Behaviour;
+﻿using Amovie.Models;
+using Behaviour.Interfaces;
+using Entities.Models.MovieDto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Amovie.Controllers
@@ -9,49 +9,60 @@ namespace Amovie.Controllers
     [ApiController]
     public class MovieController : ControllerBase
     {
-        private readonly DataContext _context;
-        private readonly IMovieBehavior _movieBehaviour;
+        private readonly IMovieService _movieService;
 
-        public MovieController(DataContext context, IMovieBehavior movieBehaviour)
+        public MovieController(IMovieService movieBehaviour)
         {
-            _context = context;
-            _movieBehaviour = movieBehaviour;
+            //_context = context;
+            _movieService = movieBehaviour;
         }
 
         //Get all Movies
         [HttpGet("allmovies")]
-        public async Task<ActionResult<List<Movie>>> Get()
+        public async Task<ActionResult<List<MoviesDto>>> Get()
         {
-            return await _movieBehaviour.Get();
+            return await _movieService.GetAll();
         }
 
         //Get last 6 Movies
         [HttpGet("lastmovies")]
-        public async Task<ActionResult<List<Movie>>> GetLast()
+        public async Task<ActionResult<List<LastMovieDto>>> GetLast()
         {
-            return await _movieBehaviour.GetLast();
+            return await _movieService.GetLast();
         }
 
         //Get Movie by ID
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
-            return await _movieBehaviour.GetMovie(id);
+            return await _movieService.GetMovie(id);
         }
 
         //Post Movie
         [HttpPost]
-        public async Task<ActionResult<List<Movie>>> AddMovie(Movie movie)
+        public async Task AddMovie(Movie movie)
         {
+            await _movieService.AddMovie(movie);
+        }
 
-            return await _movieBehaviour.AddMovie(movie);
+        [HttpPut("{id}")]
+        public async Task Update(Movie movie, int id)
+        {
+            await _movieService.UpdateMovie(movie, id);
         }
 
         //Delete Movie
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<Movie>>> DeleteMovie(int id)
+        public async Task DeleteMovie(int id)
         {
-            return await _movieBehaviour.DeleteMovie(id);
+            await _movieService.DeleteMovie(id);
+        }
+
+        //GetMovies with page
+        [HttpGet("/movies/{page}")]
+        public async Task<ActionResult<PagedMovieDto>> GetMovies(int page)
+        {
+            return await _movieService.GetPagedMovies(page);
         }
     }
 }

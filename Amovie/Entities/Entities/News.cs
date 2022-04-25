@@ -1,4 +1,6 @@
-﻿namespace Amovie.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Amovie.Models
 {
     public class News
     {
@@ -7,6 +9,8 @@
         public string Image { get; set;}
         public string Content { get; set; }
         public DateTime Date { get; set; }
-        public Author Author { get; set; }
+        public int AuthorId { get; set; }
+        [JsonIgnore]
+        public Author? Author { get; set; }
     }
 }

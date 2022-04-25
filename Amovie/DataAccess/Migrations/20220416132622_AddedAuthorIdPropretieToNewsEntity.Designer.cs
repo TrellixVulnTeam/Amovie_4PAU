@@ -9,17 +9,17 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Amovie.Migrations
+namespace DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220409170705_InitCreate")]
-    partial class InitCreate
+    [Migration("20220416132622_AddedAuthorIdPropretieToNewsEntity")]
+    partial class AddedAuthorIdPropretieToNewsEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -49,17 +49,35 @@ namespace Amovie.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ActorId");
 
-                    b.ToTable("Actors", (string)null);
+                    b.ToTable("Actors");
+
+                    b.HasData(
+                        new
+                        {
+                            ActorId = 1,
+                            FirstName = "John",
+                            LastName = "Wick"
+                        },
+                        new
+                        {
+                            ActorId = 2,
+                            FirstName = "Tom",
+                            LastName = "Hollan"
+                        },
+                        new
+                        {
+                            ActorId = 3,
+                            FirstName = "Tony",
+                            LastName = "Stark"
+                        });
                 });
 
             modelBuilder.Entity("Amovie.Models.Author", b =>
@@ -72,17 +90,35 @@ namespace Amovie.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AuthorId");
 
-                    b.ToTable("Authors", (string)null);
+                    b.ToTable("Authors");
+
+                    b.HasData(
+                        new
+                        {
+                            AuthorId = 1,
+                            FirstName = "Mike",
+                            LastName = "Fredrick"
+                        },
+                        new
+                        {
+                            AuthorId = 2,
+                            FirstName = "Terry",
+                            LastName = "Markus"
+                        },
+                        new
+                        {
+                            AuthorId = 3,
+                            FirstName = "Luckas",
+                            LastName = "Francis"
+                        });
                 });
 
             modelBuilder.Entity("Amovie.Models.Genre", b =>
@@ -95,12 +131,28 @@ namespace Amovie.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("GenreId");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres");
+
+                    b.HasData(
+                        new
+                        {
+                            GenreId = 1,
+                            Name = "Comedy"
+                        },
+                        new
+                        {
+                            GenreId = 2,
+                            Name = "Horror"
+                        },
+                        new
+                        {
+                            GenreId = 3,
+                            Name = "Drama"
+                        });
                 });
 
             modelBuilder.Entity("Amovie.Models.Movie", b =>
@@ -112,21 +164,17 @@ namespace Amovie.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MovieId"), 1L, 1);
 
                     b.Property<float>("Budget")
-                        .HasMaxLength(10)
                         .HasColumnType("real");
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Duration")
-                        .HasMaxLength(3)
                         .HasColumnType("int");
 
                     b.Property<string>("Image")
@@ -141,12 +189,11 @@ namespace Amovie.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MovieId");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("Amovie.Models.News", b =>
@@ -162,8 +209,7 @@ namespace Amovie.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -174,14 +220,13 @@ namespace Amovie.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("NewsId");
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("News", (string)null);
+                    b.ToTable("News");
                 });
 
             modelBuilder.Entity("Amovie.Models.Review", b =>
@@ -194,8 +239,7 @@ namespace Amovie.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -205,14 +249,13 @@ namespace Amovie.Migrations
 
                     b.Property<string>("User")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ReviewId");
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("GenreMovie", b =>

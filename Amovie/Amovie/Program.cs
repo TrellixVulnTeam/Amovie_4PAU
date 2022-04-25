@@ -1,5 +1,8 @@
 using Amovie.Configuration;
 using Amovie.Data;
+using Behaviour.Abstract;
+using Behaviour.Interfaces;
+using Entities.Profiler;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,10 +28,17 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddControllers();
 
+//add mapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(MovieProfiler));
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
 builder.Services.RegisterControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 

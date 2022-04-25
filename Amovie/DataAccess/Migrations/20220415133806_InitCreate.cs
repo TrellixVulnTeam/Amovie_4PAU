@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Amovie.Migrations
+namespace DataAccess.Migrations
 {
     public partial class InitCreate : Migration
     {
@@ -15,8 +15,8 @@ namespace Amovie.Migrations
                 {
                     ActorId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,8 +29,8 @@ namespace Amovie.Migrations
                 {
                     AuthorId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,7 +43,7 @@ namespace Amovie.Migrations
                 {
                     GenreId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,14 +56,14 @@ namespace Amovie.Migrations
                 {
                     MovieId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Release = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Rating = table.Column<float>(type: "real", nullable: false),
-                    Duration = table.Column<int>(type: "int", maxLength: 3, nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Budget = table.Column<float>(type: "real", maxLength: 10, nullable: false)
+                    Duration = table.Column<int>(type: "int", nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Budget = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,9 +76,9 @@ namespace Amovie.Migrations
                 {
                     NewsId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -147,9 +147,9 @@ namespace Amovie.Migrations
                 {
                     ReviewId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    User = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    User = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MovieId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -161,6 +161,36 @@ namespace Amovie.Migrations
                         principalTable: "Movies",
                         principalColumn: "MovieId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Actors",
+                columns: new[] { "ActorId", "FirstName", "LastName" },
+                values: new object[,]
+                {
+                    { 1, "John", "Wick" },
+                    { 2, "Tom", "Hollan" },
+                    { 3, "Tony", "Stark" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Authors",
+                columns: new[] { "AuthorId", "FirstName", "LastName" },
+                values: new object[,]
+                {
+                    { 1, "Mike", "Fredrick" },
+                    { 2, "Terry", "Markus" },
+                    { 3, "Luckas", "Francis" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Genres",
+                columns: new[] { "GenreId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Comedy" },
+                    { 2, "Horror" },
+                    { 3, "Drama" }
                 });
 
             migrationBuilder.CreateIndex(
