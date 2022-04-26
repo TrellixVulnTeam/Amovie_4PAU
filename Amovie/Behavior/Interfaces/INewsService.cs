@@ -12,5 +12,6 @@ namespace Behaviour.Interfaces
         public Task AddNews(AddNewsDto news);
         public Task DeleteNews(int id);
         public Task UpdateNews(UpdateNewsDto news, int id);
+        public Task<PagedNewsDto> GetPagedNews(int page);
     }
 }

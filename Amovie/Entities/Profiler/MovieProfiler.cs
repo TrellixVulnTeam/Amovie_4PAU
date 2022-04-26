@@ -14,18 +14,15 @@ namespace Entities.Profiler
             CreateMap<Movie, LastMovieDto>().ReverseMap();
             CreateMap<Movie, PagedMovieDto>().ReverseMap();
             CreateMap<Movie, MoviesDto>().ReverseMap();
-
+            CreateMap<Movie, AddMovieDto>().ReverseMap();
+            CreateMap<Movie, SingleMovieDto>().ReverseMap();
 
             //news
-            CreateMap<News, GetNewsDto>(MemberList.Source)
-                 .ForPath(dest => dest.AuthorFirstName,
-            opt => opt.MapFrom(src => src.Author!.FirstName))
-                 .ForPath(dest =>dest.AuthorLastName,
-                        opt => opt.MapFrom(src => src.Author!.LastName))
-                 .ReverseMap();
+            CreateMap<News, GetNewsDto>().ReverseMap();
+            CreateMap<News, UpdateNewsDto>().ReverseMap();
+            CreateMap<News, UpdateNewsDto>().ReverseMap();
+            CreateMap<PagedNewsDto, News>().ReverseMap();
 
-            CreateMap<UpdateNewsDto, News>().ReverseMap();
-            CreateMap<AddNewsDto, News>().ReverseMap();
         }
     }
 }

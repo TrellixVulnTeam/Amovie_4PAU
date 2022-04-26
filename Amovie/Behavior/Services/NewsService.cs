@@ -6,41 +6,19 @@ using Amovie.Models;
 using Entities.Models.NewsDto;
 using AutoMapper;
 using Behaviour.Abstract;
+using Entities.Exceptions;
 
 namespace Behaviour.Services
 {
-    public class NewsService : GenericRepository<Movie>, INewsService
+    public class NewsService : GenericRepository<News>, INewsService
     {
         public readonly IRepository<News> _repository;
         private readonly IMapper _mapper;
-
-        //public NewsService(DataContext context) : base(context) { }
 
         public NewsService(IRepository<News> repository, IMapper mapper, DataContext context) : base(context)
         {
             _repository = repository;
             _mapper = mapper;
-        }
-
-        public async Task AddNews(AddNewsDto news)
-        {
-            var newsDto = _mapper.Map<News>(news);
-            _context.Add(newsDto);
-            _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteNews(int id)
-        {
-            var news = _repository.Get(id);
-            if (news == null)
-            {
-                throw new Exception("News not found");
-            }
-            else
-            {
-               _repository.Delete(news);
-               _repository.SaveChangesAsync();
-            }
         }
 
         public async Task<List<GetNewsDto>> GetLast()
@@ -73,11 +51,12 @@ namespace Behaviour.Services
 
         public async Task<GetNewsDto> GetSingleNews(int id)
         {
-            var news = _repository.Get(id);
+            var news = await _context.News.Include(x => x.Author).FirstOrDefaultAsync(x => x.NewsId == id);
+
 
             if (news == null)
             {
-                throw new Exception("News not found");
+                throw new Exception("News with such id does not exist!");
             }
             else
             {
@@ -86,15 +65,67 @@ namespace Behaviour.Services
             }
         }
 
-        public async Task UpdateNews(UpdateNewsDto news, int id)
+        public async Task AddNews(AddNewsDto news)
         {
-            var movieDb =  _repository.Get(id);
-            _mapper.Map(news, movieDb);
-            _repository.Update(movieDb);
+            var newsDto = _mapper.Map<News>(news);
+            _repository.Add(newsDto);
             _repository.SaveChangesAsync();
         }
 
-       
+        public async Task DeleteNews(int id)
+        {
+            var news = _repository.Get(id);
+            if (news == null)
+            {
+                throw new Exception("News not found");
+            }
+            else
+            {
+                _repository.Delete(news);
+                _repository.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateNews(UpdateNewsDto news, int id)
+        {
+            var movieDb =  _repository.Get(id);
+
+            if(movieDb == null)
+            {
+                throw new NotFoundException("News with such id can not be found!");
+            }
+            else
+            {
+                _mapper.Map(news, movieDb);
+                _repository.Update(movieDb);
+                _repository.SaveChangesAsync();
+            }
+        }
+
+        public async Task<PagedNewsDto> GetPagedNews(int page)
+        {
+
+            var pageResults = 2f;
+
+            var pageCount = Math.Ceiling(_repository.GetAll().Count() / pageResults);
+
+            var news = _context.News.Include(x => x.Author)
+                .Skip((page - 1) * (int)pageResults)
+                .Take((int)pageResults);
+
+            var newsDto = _mapper.Map<List<GetNewsDto>>(news);
+
+            var response = new PagedNewsDto
+            {
+                News = newsDto,
+                CurrentPage = page,
+                Pages = (int)pageCount
+            };
+            return response;
+
+        }
+
+
 
         //public async Task<List<GetNewsDto>> GetLast()
         //{

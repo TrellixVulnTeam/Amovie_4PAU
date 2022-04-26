@@ -33,14 +33,19 @@ namespace Amovie.Controllers
 
         //Get Movie by ID
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<ActionResult> GetMovie(int id)
         {
-            return await _movieService.GetMovie(id);
+            if(id < 0)
+            {
+                return BadRequest("Such id does not exist!");
+            }
+            var movie = await _movieService.GetMovie(id);
+            return Ok(movie);
         }
 
         //Post Movie
         [HttpPost]
-        public async Task AddMovie(Movie movie)
+        public async Task AddMovie(AddMovieDto movie)
         {
             await _movieService.AddMovie(movie);
         }

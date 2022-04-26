@@ -1,3 +1,4 @@
+using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,7 +15,7 @@ namespace Movie.IntegrationTest
 
             response.EnsureSuccessStatusCode();
 
-            //Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
     }
 }

@@ -17,34 +17,6 @@ namespace Behaviour.Services
             _mapper = mapper;
         }
 
-        //Update Movie 
-        //public async Task<List<Movie>> Update(Movie movie, int id)
-        //{
-        //    var dbMovie = await _context.Movies.FindAsync(id);
-
-        //    if (dbMovie == null)
-        //    {
-        //        throw new Exception("Movie not found");
-        //    }
-
-        //    else
-        //    {
-        //        dbMovie.Title = movie.Title;
-        //        dbMovie.Image = movie.Image;
-        //        dbMovie.Description = movie.Description;
-        //        dbMovie.Release = movie.Release;
-        //        dbMovie.Rating = movie.Rating;
-        //        dbMovie.Duration = movie.Duration;
-        //        dbMovie.Country = movie.Country;
-        //        dbMovie.Budget = movie.Budget;
-
-        //        _context.SaveChangesAsync();
-        //    }
-        //    return await _context.Movies.ToListAsync();
-        //}
-
-        
-
         public async Task<List<MoviesDto>> GetAll()
         {
             var movies = _repository.GetAll();
@@ -65,9 +37,12 @@ namespace Behaviour.Services
             return moviesDto;
         }
 
+        //work...
         public async Task<Movie> GetMovie(int id)
         {
             var movie = _repository.Get(id);
+
+            var movieDto = _mapper.Map<SingleMovieDto>(movie);
 
             if (movie == null)
             {
@@ -79,9 +54,10 @@ namespace Behaviour.Services
             }
         }
 
-        public async Task AddMovie(Movie movie)
+        public async Task AddMovie(AddMovieDto movie)
         {
-            _repository.Add(movie);
+            var moviesDto = _mapper.Map<Movie>(movie);
+            _repository.Add(moviesDto);
             _repository.SaveChangesAsync();
         }
 

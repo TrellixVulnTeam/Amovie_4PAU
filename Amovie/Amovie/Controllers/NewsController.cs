@@ -1,5 +1,6 @@
 ﻿using Amovie.Models.NewsDto;
 using Behaviour.Interfaces;
+using Entities.Exceptions;
 using Entities.Models.NewsDto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,9 +30,9 @@ namespace Amovie.Controllers
             return await _newsService.GetLast();
         }
 
-
         //Get News by ID
         [HttpGet("{id}")]
+        [ApiExceptionFilter]
         public async Task<ActionResult<GetNewsDto>> GetNews(int id)
         {
             return await _newsService.GetSingleNews(id); 
@@ -39,7 +40,7 @@ namespace Amovie.Controllers
 
         //Add News
         [HttpPost]
-        public async Task Add(AddNewsDto news)
+        public async Task Add([FromBody]AddNewsDto news)
         {
             await _newsService.AddNews(news);
         }
@@ -52,9 +53,17 @@ namespace Amovie.Controllers
 
         //Update News
         [HttpPut("{id}")]
-        public async Task Update(UpdateNewsDto news, int id)
+        [ApiExceptionFilter]
+        public async Task Update([FromBody]UpdateNewsDto news, int id)
         {
             await _newsService.UpdateNews(news, id);
+        }
+
+        //GetPaggedNews
+        [HttpGet("/news/{page}")]
+        public async Task<ActionResult<PagedNewsDto>> GetPagedNews(int page)
+        {
+            return await _newsService.GetPagedNews(page);
         }
     }
 }

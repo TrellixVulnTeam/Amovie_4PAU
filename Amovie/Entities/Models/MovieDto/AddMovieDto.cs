@@ -1,23 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Amovie.Models
+namespace Entities.Models.MovieDto
 {
-    public class Movie
+    public class AddMovieDto
     {
         public int MovieId { get; set; }
         public string Title { get; set; }
         public string Image { get; set; }
         public string Description { get; set; }
-        [Range(typeof(DateTime), "1/1/1900", "1/1/2022")]
         public DateTime Release { get; set; }
-        [Range(1, 10)]
         public float Rating { get; set; }
         public int Duration { get; set; }
         public string Country { get; set; }
         public float Budget { get; set; }
-        public List<Review>? Reviews { get; set; }
-        public List<Genre>? Genres { get; set; }
-        public List<Actor>? Actors { get; set; }
+        public int GenreId { get; set; }
+        public int ActorId { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace Behaviour.Interfaces
          Task<List<MoviesDto>> GetAll();
          Task<List<LastMovieDto>> GetLast();
          Task<Movie> GetMovie(int id);
-         Task AddMovie(Movie movie);
+         Task AddMovie(AddMovieDto movie);
          Task UpdateMovie(Movie movie, int id);
          Task DeleteMovie(int id);
          Task<PagedMovieDto> GetPagedMovies(int page);
