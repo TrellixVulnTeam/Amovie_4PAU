@@ -1,11 +1,11 @@
-﻿namespace Amovie.Models
+﻿namespace Entities.Entities
 {
-    public class Review
+    public class Review : BaseEntity
     {
-        public int ReviewId { get; set; }
         public string User { get; set; }
         public DateTime Date { get; set; }
         public string Content { get; set; }
         public Movie Movie { get; set; }
+        public int MovieId { get; set; }
     }
 }

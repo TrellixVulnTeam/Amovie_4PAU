@@ -1,12 +1,10 @@
-﻿using Amovie.Models.NewsDto;
-using Behaviour.Interfaces;
-using Entities.Exceptions;
+﻿using Behaviour.Interfaces;
 using Entities.Models.NewsDto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Amovie.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class NewsController : ControllerBase
     {
@@ -18,52 +16,58 @@ namespace Amovie.Controllers
 
         //Get all News
         [HttpGet("allnews")]
-        public async Task<ActionResult<List<GetNewsDto>>> Get()
+        public async Task<ActionResult<List<NewsDto>>> GetAllNews()
         {
-            return await _newsService.GetNews();
+            var newsList = await _newsService.GetAll();
+            return newsList;
         }
 
-        //Get last 3 News
+        ////Get last 3 News
         [HttpGet("lastnews")]
-        public async Task<ActionResult<List<GetNewsDto>>> GetLast()
+        public async Task<ActionResult<List<NewsDto>>> GetLast()
         {
-            return await _newsService.GetLast();
+            var newsList = await _newsService.GetLast();
+            return Ok(newsList);
         }
 
-        //Get News by ID
-        [HttpGet("{id}")]
-        [ApiExceptionFilter]
-        public async Task<ActionResult<GetNewsDto>> GetNews(int id)
+        ////Get News by ID
+        [HttpGet("news/{id}")]
+        public async Task<ActionResult<NewsDto>> GetNews(int id)
         {
-            return await _newsService.GetSingleNews(id); 
+            var news = await _newsService.GetNews(id);
+            if (news == null)
+                return NotFound("Such ID does not exists!");
+            return Ok(news);
         }
 
-        //Add News
-        [HttpPost]
-        public async Task Add([FromBody]AddNewsDto news)
+        ////Add News
+        [HttpPost("/addnews")]
+        public async Task Add(AddNewsDto newsDto)
         {
-            await _newsService.AddNews(news);
+            await _newsService.AddNews(newsDto);
         }
 
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-            await _newsService.DeleteNews(id);
+           await _newsService.DeleteNews(id);
         }
 
-        //Update News
+        ////Update News
         [HttpPut("{id}")]
-        [ApiExceptionFilter]
-        public async Task Update([FromBody]UpdateNewsDto news, int id)
+        //[ApiExceptionFilter]
+        public async Task Update(AddNewsDto newsDto, int id)
         {
-            await _newsService.UpdateNews(news, id);
+            await _newsService.UpdateNews(newsDto, id);
         }
 
-        //GetPaggedNews
-        [HttpGet("/news/{page}")]
-        public async Task<ActionResult<PagedNewsDto>> GetPagedNews(int page)
+        ////GetPaggedNews
+        [HttpGet("/newspage/{page}")]
+        public async Task<ActionResult<PagedNewsDto>> GetPagedNews(int page, int pageSize)
         {
-            return await _newsService.GetPagedNews(page);
+            var pagedNews = await _newsService.GetPagedNews(page, pageSize);
+
+            return Ok(pagedNews);
         }
     }
 }

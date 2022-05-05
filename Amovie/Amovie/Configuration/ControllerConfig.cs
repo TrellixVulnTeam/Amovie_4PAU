@@ -1,5 +1,5 @@
-﻿using Behaviour;
-using Behaviour.Interfaces;
+﻿using Behaviour.Interfaces;
+using Behaviour.Repositories;
 using Behaviour.Services;
 
 namespace Amovie.Configuration
@@ -10,6 +10,9 @@ namespace Amovie.Configuration
         {
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<INewsService, NewsService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IReviewService, ReviewService>();
+
             return services;
         }
     }

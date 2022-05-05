@@ -1,62 +1,56 @@
-﻿using Amovie.Models;
+﻿using AutoMapper;
 using Behaviour.Interfaces;
 using Entities.Models.MovieDto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Amovie.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/movies/")]
     [ApiController]
     public class MovieController : ControllerBase
     {
         private readonly IMovieService _movieService;
-
-        public MovieController(IMovieService movieBehaviour)
+        public MovieController(IMovieService movieService)
         {
-            //_context = context;
-            _movieService = movieBehaviour;
+            _movieService = movieService;
         }
 
         //Get all Movies
         [HttpGet("allmovies")]
         public async Task<ActionResult<List<MoviesDto>>> Get()
         {
-            return await _movieService.GetAll();
+            return Ok (await _movieService.GetAll());
         }
 
         //Get last 6 Movies
         [HttpGet("lastmovies")]
         public async Task<ActionResult<List<LastMovieDto>>> GetLast()
         {
-            return await _movieService.GetLast();
+            var movieList = await _movieService.GetLast();
+            return Ok(movieList);
         }
 
         //Get Movie by ID
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetMovie(int id)
+        public async Task<SingleMovieDto> GetMovie(int id)
         {
-            if(id < 0)
-            {
-                return BadRequest("Such id does not exist!");
-            }
-            var movie = await _movieService.GetMovie(id);
-            return Ok(movie);
+            return await _movieService.GetMovie(id);
         }
 
-        //Post Movie
-        [HttpPost]
-        public async Task AddMovie(AddMovieDto movie)
+        [HttpPost("/create")]
+        public async Task<ActionResult> AddMovieWithGenre(AddMovieDto movieDto)
         {
-            await _movieService.AddMovie(movie);
+            await _movieService.AddMovie(movieDto);
+            return Ok();
         }
 
         [HttpPut("{id}")]
-        public async Task Update(Movie movie, int id)
+        public async Task Update(AddMovieDto movieDto, int id)
         {
-            await _movieService.UpdateMovie(movie, id);
+            await _movieService.UpdateMovie(movieDto, id);
         }
 
-        //Delete Movie
+        ////Delete Movie
         [HttpDelete("{id}")]
         public async Task DeleteMovie(int id)
         {
@@ -64,10 +58,12 @@ namespace Amovie.Controllers
         }
 
         //GetMovies with page
-        [HttpGet("/movies/{page}")]
-        public async Task<ActionResult<PagedMovieDto>> GetMovies(int page)
+        [HttpGet("/movies/paged")]
+        public async Task<ActionResult<PagedMovieDto>> GetMovies(int page = 1, int pageSize = 2)
         {
-            return await _movieService.GetPagedMovies(page);
+            var pagedMovies = await _movieService.GetPagedMovies(page, pageSize);
+
+            return Ok(pagedMovies);
         }
     }
 }

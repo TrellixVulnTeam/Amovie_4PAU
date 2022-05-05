@@ -1,17 +1,20 @@
-﻿using Amovie.Models;
-using Amovie.Models.NewsDto;
-using Entities.Models.NewsDto;
+﻿using Entities.Models.NewsDto;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Behaviour.Interfaces
 {
     public interface INewsService
     {
-        public Task<List<GetNewsDto>> GetNews();
-        public Task<List<GetNewsDto>> GetLast();
-        public Task<GetNewsDto> GetSingleNews(int id);
-        public Task AddNews(AddNewsDto news);
-        public Task DeleteNews(int id);
-        public Task UpdateNews(UpdateNewsDto news, int id);
-        public Task<PagedNewsDto> GetPagedNews(int page);
+        Task<List<NewsDto>> GetAll();
+        Task<List<NewsDto>> GetLast();
+        Task<NewsDto> GetNews(int id);
+        Task AddNews(AddNewsDto movie);
+        Task UpdateNews(AddNewsDto movie, int id);
+        Task DeleteNews(int id);
+        Task<PagedNewsDto> GetPagedNews(int page, int pageSize);
     }
 }

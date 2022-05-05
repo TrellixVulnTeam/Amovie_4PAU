@@ -1,16 +1,14 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Amovie.Models
+namespace Entities.Entities
 {
-    public class News
+    public class News : BaseEntity
     {
-        public int NewsId { get; set; }
-        public string Title { get; set;}
-        public string Image { get; set;}
+        public string Title { get; set; }
+        public string Image { get; set; }
         public string Content { get; set; }
         public DateTime Date { get; set; }
         public int AuthorId { get; set; }
-        [JsonIgnore]
         public Author? Author { get; set; }
     }
 }

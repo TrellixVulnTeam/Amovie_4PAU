@@ -1,4 +1,4 @@
-﻿using Amovie.Models;
+﻿using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,7 +10,6 @@ namespace Amovie.Configuration
         {
             builder.ToTable("Authors");
 
-            builder.HasKey(x => new { x.AuthorId });
 
             builder.Property(x => x.FirstName)
                 .IsRequired()

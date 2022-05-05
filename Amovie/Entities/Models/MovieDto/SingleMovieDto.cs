@@ -1,12 +1,10 @@
-﻿
-
-using Amovie.Models;
+﻿using Entities.Models.ReviewDto;
 
 namespace Entities.Models.MovieDto
 {
     public class SingleMovieDto
     {
-        public int MovieId { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Image { get; set; }
         public string Description { get; set; }
@@ -15,8 +13,8 @@ namespace Entities.Models.MovieDto
         public int Duration { get; set; }
         public string Country { get; set; }
         public float Budget { get; set; }
-        public List<Review>? Reviews { get; set; }
-        public List<Genre>? Genres { get; set; }
-        public List<Actor>? Actors { get; set; }
+        public List<DisplayReviewDto>? Reviews { get; set; }
+        public List<string>? Genres { get; set; }
+        public List<string>? Actors { get; set; }
     }
 }

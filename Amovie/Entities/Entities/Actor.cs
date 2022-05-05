@@ -1,8 +1,7 @@
-﻿namespace Amovie.Models
+﻿namespace Entities.Entities
 {
-    public class Actor
+    public class Actor : BaseEntity
     {
-        public int ActorId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public List<Movie> Movies { get; set; }

@@ -1,4 +1,4 @@
-﻿using Amovie.Models;
+﻿using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataSeed
@@ -9,9 +9,9 @@ namespace DataSeed
         {
             builder.Entity<Actor>().HasData(new List<Actor>()
             {
-                new Actor() { ActorId = 1, FirstName = "John", LastName = "Wick" },
-                new Actor() { ActorId = 2, FirstName = "Tom", LastName = "Hollan" },
-                new Actor() { ActorId = 3, FirstName = "Tony", LastName = "Stark" }
+                new Actor() { Id = 1, FirstName = "John", LastName = "Wick" },
+                new Actor() { Id = 2, FirstName = "Tom", LastName = "Hollan" },
+                new Actor() { Id = 3, FirstName = "Tony", LastName = "Stark" }
             });
         }
 
@@ -19,9 +19,9 @@ namespace DataSeed
         {
             builder.Entity<Genre>().HasData(new List<Genre>()
             {
-                new Genre(){GenreId = 1, Name = "Comedy"},
-                new Genre(){GenreId = 2, Name = "Horror"},
-                new Genre(){GenreId = 3, Name = "Drama"},
+                new Genre(){Id = 1, Name = "Comedy"},
+                new Genre(){Id = 2, Name = "Horror"},
+                new Genre(){Id = 3, Name = "Drama"},
             });
         }
 
@@ -29,9 +29,9 @@ namespace DataSeed
         {
             builder.Entity<Author>().HasData(new List<Author>()
             {
-                new Author(){AuthorId = 1, FirstName = "Mike", LastName = "Fredrick"},
-                new Author(){AuthorId = 2, FirstName = "Terry", LastName = "Markus"},
-                new Author(){AuthorId = 3, FirstName = "Luckas", LastName = "Francis"},
+                new Author(){Id = 1, FirstName = "Mike", LastName = "Fredrick"},
+                new Author(){Id = 2, FirstName = "Terry", LastName = "Markus"},
+                new Author(){Id = 3, FirstName = "Luckas", LastName = "Francis"},
             });
         }
     }

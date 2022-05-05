@@ -5,7 +5,7 @@ namespace Entities.Models.MovieDto
 {
     public class MoviesDto
     {
-        public int MovieId { get; set; }
+        public int Id { get; set; }
         [MaxLength(30)]
         [Required]
         public string Title { get; set; }

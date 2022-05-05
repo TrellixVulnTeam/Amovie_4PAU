@@ -1,9 +1,9 @@
-﻿using Amovie.Models;
-using DataSeed;
+﻿using DataSeed;
+using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace Amovie.Data
+namespace DataAccess.Data
 {
     public class DataContext : DbContext
     {
@@ -13,9 +13,10 @@ namespace Amovie.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Actor> Actors { get; set; }
+        public DbSet<User> Users { get; set; }
 
-        public DataContext(DbContextOptions<DataContext> options):base(options)
-        {}
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

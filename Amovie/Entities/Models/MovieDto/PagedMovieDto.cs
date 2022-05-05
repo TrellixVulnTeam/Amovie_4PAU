@@ -1,5 +1,4 @@
-﻿using Amovie.Models;
-
+﻿
 namespace Entities.Models.MovieDto
 {
     public class PagedMovieDto

@@ -1,4 +1,4 @@
-﻿using Amovie.Models;
+﻿using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,8 +9,6 @@ namespace Amovie.Configuration
         public void Configure(EntityTypeBuilder<Review> builder)
         {
             builder.ToTable("Reviews");
-
-            builder.HasKey(x => new { x.ReviewId });
 
             builder.Property(x => x.User)
                 .IsRequired()

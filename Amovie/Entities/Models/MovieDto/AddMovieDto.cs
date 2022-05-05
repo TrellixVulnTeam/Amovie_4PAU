@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using System.Text.Json.Serialization;
 
 namespace Entities.Models.MovieDto
 {
     public class AddMovieDto
     {
-        public int MovieId { get; set; }
         public string Title { get; set; }
         public string Image { get; set; }
         public string Description { get; set; }
@@ -17,7 +13,7 @@ namespace Entities.Models.MovieDto
         public int Duration { get; set; }
         public string Country { get; set; }
         public float Budget { get; set; }
-        public int GenreId { get; set; }
-        public int ActorId { get; set; }
+        public List<int> GenreId { get; set; }
+        public List<int> ActorId { get; set; }
     }
 }

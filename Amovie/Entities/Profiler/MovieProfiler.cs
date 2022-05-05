@@ -1,8 +1,8 @@
-﻿using Amovie.Models;
-using Amovie.Models.NewsDto;
-using AutoMapper;
+﻿using AutoMapper;
+using Entities.Entities;
 using Entities.Models.MovieDto;
 using Entities.Models.NewsDto;
+using Entities.Models.ReviewDto;
 
 namespace Entities.Profiler
 {
@@ -14,14 +14,30 @@ namespace Entities.Profiler
             CreateMap<Movie, LastMovieDto>().ReverseMap();
             CreateMap<Movie, PagedMovieDto>().ReverseMap();
             CreateMap<Movie, MoviesDto>().ReverseMap();
-            CreateMap<Movie, AddMovieDto>().ReverseMap();
-            CreateMap<Movie, SingleMovieDto>().ReverseMap();
+            CreateMap<AddMovieDto, Movie>().ReverseMap();
+
+            CreateMap<Movie, SingleMovieDto>()
+                .ForMember(m => m.Actors,
+                o => o.MapFrom(m => m.Actors!.Select(m => m.FirstName + " " + m.LastName)))
+                .ForMember(m => m.Genres,
+                o => o.MapFrom(m => m.Genres!.Select(m => m.Name)))
+                .ReverseMap();
+
 
             //news
-            CreateMap<News, GetNewsDto>().ReverseMap();
-            CreateMap<News, UpdateNewsDto>().ReverseMap();
-            CreateMap<News, UpdateNewsDto>().ReverseMap();
+            CreateMap<News, NewsDto>()
+                .ForMember(n => n.AuthorName,
+               x => x.MapFrom(m => m.Author!.FirstName + " " + m.Author.LastName))
+                .ReverseMap();
+            CreateMap<News, AddNewsDto>().ReverseMap();
             CreateMap<PagedNewsDto, News>().ReverseMap();
+
+
+            //Review
+            CreateMap<Review, DisplayReviewDto>().ReverseMap();
+            CreateMap<Review, AddReviewDto>()
+                .ReverseMap();
+
 
         }
     }

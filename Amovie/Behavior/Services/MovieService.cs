@@ -1,8 +1,9 @@
-﻿using Amovie.Data;
-using Amovie.Models;
-using AutoMapper;
+﻿using AutoMapper;
 using Behaviour.Interfaces;
+using DataAccess.Data;
+using Entities.Entities;
 using Entities.Models.MovieDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace Behaviour.Services
 {
@@ -11,12 +12,13 @@ namespace Behaviour.Services
 
         private readonly IRepository<Movie> _repository;
         private readonly IMapper _mapper;
-        public MovieService(IRepository<Movie> repository, IMapper mapper)
+        private readonly DataContext _context;
+        public MovieService(IRepository<Movie> repository, IMapper mapper, DataContext context)
         {
             _repository = repository;
             _mapper = mapper;
+            _context = context;
         }
-
         public async Task<List<MoviesDto>> GetAll()
         {
             var movies = _repository.GetAll();
@@ -29,19 +31,19 @@ namespace Behaviour.Services
         public async Task<List<LastMovieDto>> GetLast()
         {
             var lastMovies = _repository.GetAll()
-                .Skip(Math
-                .Max(0, _repository.GetAll()
-                .Count() - 6));
+            .Skip(Math
+            .Max(0, _repository.GetAll()
+            .Count() - 6));
 
             var moviesDto = _mapper.Map<List<LastMovieDto>>(lastMovies);
             return moviesDto;
         }
 
-        //work...
-        public async Task<Movie> GetMovie(int id)
+        //Get Movie by id
+        public async Task<SingleMovieDto> GetMovie(int id)
         {
-            var movie = _repository.Get(id);
-
+            var movie = await _repository.GetByIdWithIncludes(id, x => x.Genres, x => x.Actors, x => x.Reviews);
+            
             var movieDto = _mapper.Map<SingleMovieDto>(movie);
 
             if (movie == null)
@@ -50,66 +52,66 @@ namespace Behaviour.Services
             }
             else
             {
-                return movie;
+                return movieDto;
             }
         }
-
-        public async Task AddMovie(AddMovieDto movie)
+       
+        public async Task AddMovie(AddMovieDto movieDto)
         {
-            var moviesDto = _mapper.Map<Movie>(movie);
-            _repository.Add(moviesDto);
-            _repository.SaveChangesAsync();
+            var genres = await _context.Genres.Where(x => movieDto.GenreId.Contains(x.Id)).ToListAsync();
+            var actors = await _context.Actors.Where(x => movieDto.ActorId.Contains(x.Id)).ToListAsync();
+
+            var movie = _mapper.Map<Movie>(movieDto);
+            movie.Genres = genres;
+            movie.Actors = actors;
+
+            await _repository.Add(movie);
+            await _repository.SaveChangesAsync();
         }
 
-        public async Task UpdateMovie(Movie movie, int id)
+        public async Task UpdateMovie(AddMovieDto movieDto, int id)
         {
-            var dbMovie = _repository.Get(id);
+            var genres = await _context.Genres.Where(x => movieDto.GenreId.Contains(x.Id)).ToListAsync();
+            var actors = await _context.Actors.Where(x => movieDto.ActorId.Contains(x.Id)).ToListAsync();
 
-            if (dbMovie == null)
-            {
-                throw new Exception("Movie not found");
-            }
-            else
-            {
-                dbMovie.Title = movie.Title;
-                dbMovie.Image = movie.Image;
-                dbMovie.Description = movie.Description;
-                dbMovie.Release = movie.Release;
-                dbMovie.Rating = movie.Rating;
-                dbMovie.Duration = movie.Duration;
-                dbMovie.Country = movie.Country;
-                dbMovie.Budget = movie.Budget;
+            var movie = await _repository.Get(id);
+            
+            movie = _mapper.Map<Movie>(movieDto);
+            movie.Genres = genres;
+            movie.Actors = actors;
 
-                _repository.Update(movie);
-                _repository.SaveChangesAsync();
-            }
+            await _repository.Update(movie);
+            await _repository.SaveChangesAsync();
+
         }
 
         public async Task DeleteMovie(int id)
         {
-            var movieId = _repository.GetAll().FirstOrDefault(m => m.MovieId == id);
+            var movie = _repository.GetAll().FirstOrDefault(m => m.Id == id);
 
-            if (movieId == null)
+
+            if (movie == null)
             {
                 throw new Exception("Movie not found");
             }
             else
             {
-                _repository.Delete(movieId);
-                _repository.SaveChangesAsync();
+                await _repository.Delete(movie.Id);
+                await _repository.SaveChangesAsync();
             }
         }
 
-        public async Task<PagedMovieDto> GetPagedMovies(int page)
+       
+
+        public async Task<PagedMovieDto> GetPagedMovies(int page, int pageSize)
         {
+            //var pageResults = 2f;
 
-            var pageResults = 2f;
-
-            var pageCount = Math.Ceiling(_repository.GetAll().Count() / pageResults);
+            var pageCount = Math.Ceiling(_repository.GetAll().Count() / (float)pageSize);
 
             var movies = _repository.GetAll()
-                .Skip((page - 1) * (int)pageResults)
-                .Take((int)pageResults);
+                .Skip((page - 1) * (int)pageSize)
+                .Take((int)pageSize);
 
             var moviesDto = _mapper.Map<List<MoviesDto>>(movies);
 
@@ -120,7 +122,6 @@ namespace Behaviour.Services
                 Pages = (int)pageCount
             };
             return response;
-
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace Amovie.Models
+﻿namespace Entities.Entities
 {
-    public class Author
+    public class Author : BaseEntity
     {
-        public int AuthorId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public List<News> News { get; set; }
