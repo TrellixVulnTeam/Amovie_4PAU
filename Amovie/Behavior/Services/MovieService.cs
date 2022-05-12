@@ -101,8 +101,6 @@ namespace Behaviour.Services
             }
         }
 
-       
-
         public async Task<PagedMovieDto> GetPagedMovies(int page, int pageSize)
         {
             //var pageResults = 2f;

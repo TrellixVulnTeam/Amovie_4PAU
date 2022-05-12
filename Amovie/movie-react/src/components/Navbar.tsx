@@ -1,7 +1,7 @@
 import "../styles/navbar.scss";
 import logo from "../images/Logo.svg";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   AppBar,
   Box,
@@ -15,12 +15,12 @@ import { Container, Button } from "@mui/material";
 import React from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
-
-const pages = ["Movies", "News", "NewsPagination"];
-const auth = ["SignIn", "SignUp"];
+import { UserContext } from "../providers/UserProvider";
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+
+  const { user, setUser } = useContext(UserContext);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -29,6 +29,43 @@ const ResponsiveAppBar = () => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  const logout = () => {
+    const url = "http://localhost:7063/api/logout";
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    
+    setUser({ name: ""});
+  };
+
+  let menu;
+  if (user?.name === "") {
+    menu = (
+      <Box>
+        <Link to="/signin">
+          <Button>Sign In</Button>
+        </Link>
+        <Link to="/signup">
+          <Button>Sign Up</Button>
+        </Link>
+      </Box>
+    );
+  } else {
+   
+    menu = (
+      <Box>
+        {/* <Button>Hello {user?.name}</Button> */}
+        <Link to="/signin" onClick={logout}>
+          <Button>Logout</Button>
+        </Link>
+      </Box>
+    );
+  }
 
   return (
     <AppBar position="static">
@@ -41,7 +78,7 @@ const ResponsiveAppBar = () => {
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
           >
             <Link to="/">
-              <img src={logo} />
+              <img src={logo} alt="logo" />
             </Link>
           </Typography>
 
@@ -71,20 +108,27 @@ const ResponsiveAppBar = () => {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to={page}>
-                      {page}
-                  </Link>
+               <MenuItem onClick={handleCloseNavMenu}>
+                <Link to="/movies">
+                  <Button>Movies</Button>
+                </Link>
                 </MenuItem>
-              ))}
-              {auth.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to={page}>
-                      {page}
-                  </Link>
+                <MenuItem onClick={handleCloseNavMenu}>
+                <Link to="/news">
+                  <Button>News</Button>
+                </Link>
+              </MenuItem>
+
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Link to="/signin">
+                  <Button>Sign In</Button>
+                </Link>
                 </MenuItem>
-              ))}
+                <MenuItem onClick={handleCloseNavMenu}>
+                <Link to="/signup">
+                  <Button>Sign Up</Button>
+                </Link>
+              </MenuItem>
             </Menu>
           </Box>
           <Typography
@@ -94,30 +138,23 @@ const ResponsiveAppBar = () => {
             sx={{ flexGrow: 2, display: { xs: "flex", md: "none" } }}
           >
             <Link to="/">
-              <img src={logo} />
+              <img src={logo} alt="logo" />
             </Link>
           </Typography>
           <Box className="box">
-            {pages.map((page) => (
-              <Link to={page} key={page}>
-                <Button  >
-                  {page}
-                </Button>
-              </Link>
-            ))}
+            <Link to="/movies">
+              <Button>Movies</Button>
+            </Link>
+            <Link to="/news">
+              <Button>News</Button>
+            </Link>
           </Box>
           <Box
             className="box"
             sx={{ flexGrow: 5, display: { xs: "none", md: "flex" } }}
           >
             <PersonIcon />
-            {auth.map((page) => (
-              <Link to={page} key={page}>
-                <Button  >
-                  {page}
-                </Button>
-              </Link>
-            ))}
+            <Box>{menu}</Box>
           </Box>
         </Toolbar>
       </Container>

@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Entities.Entities;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,11 +16,13 @@ namespace Amovie.Helpers
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secureKey));
             var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
             var header = new JwtHeader(credentials);
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Sid,id.ToString()),
+                new Claim(ClaimTypes.Name, id.ToString()),
             };
-            var payLoad = new JwtPayload(id.ToString(), null, claims: claims, null, DateTime.Today.AddDays(1));
+            var payLoad = new JwtPayload(id.ToString(), null, claims, null, DateTime.Today.AddDays(1));
         
             var securityToken = new JwtSecurityToken(header, payLoad);
 

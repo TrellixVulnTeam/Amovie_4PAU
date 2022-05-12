@@ -10,8 +10,10 @@ namespace DataSeed
             builder.Entity<Actor>().HasData(new List<Actor>()
             {
                 new Actor() { Id = 1, FirstName = "John", LastName = "Wick" },
-                new Actor() { Id = 2, FirstName = "Tom", LastName = "Hollan" },
-                new Actor() { Id = 3, FirstName = "Tony", LastName = "Stark" }
+                new Actor() { Id = 2, FirstName = "Tom", LastName = "Holland" },
+                new Actor() { Id = 3, FirstName = "Tony", LastName = "Stark" },
+                new Actor() { Id = 4, FirstName = "Mark", LastName = "Cruise" },
+                new Actor() { Id = 5, FirstName = "Stephan", LastName = "Muller" }
             });
         }
 
@@ -22,6 +24,8 @@ namespace DataSeed
                 new Genre(){Id = 1, Name = "Comedy"},
                 new Genre(){Id = 2, Name = "Horror"},
                 new Genre(){Id = 3, Name = "Drama"},
+                new Genre(){Id = 3, Name = "Action"},
+                new Genre(){Id = 3, Name = "Fantasy"},
             });
         }
 
@@ -32,6 +36,10 @@ namespace DataSeed
                 new Author(){Id = 1, FirstName = "Mike", LastName = "Fredrick"},
                 new Author(){Id = 2, FirstName = "Terry", LastName = "Markus"},
                 new Author(){Id = 3, FirstName = "Luckas", LastName = "Francis"},
+                new Author() { Id = 4, FirstName = "Stephan", LastName = "Holh" },
+                new Author() { Id = 5, FirstName = "Mark", LastName = "Cruise" },
+
+
             });
         }
     }

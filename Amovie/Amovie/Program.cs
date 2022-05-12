@@ -6,7 +6,6 @@ using Behaviour.Interfaces;
 using DataAccess.Data;
 using Entities.Profiler;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +15,7 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-            .AllowAnyMethod()
+            .AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials()
@@ -30,7 +29,7 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 }); 
 
-builder.Services.AddControllers(); 
+builder.Services.AddControllers();
 
 //add mapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -59,6 +58,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("CORSPolicy");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

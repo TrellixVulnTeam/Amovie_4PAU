@@ -14,7 +14,8 @@ type Movies = {
 };
 
 export default function AllMovies() {
-const {data: movies, error, loading} = useFetch<Movies[]>("https://localhost:7063/api/movies/allmovies")
+const {data: movies, error, loading} = useFetch<Movies[]>("http://localhost:7063/api/movies/allmovies")
+console.log(movies);
     return (
       <div className="container">
         <div className="movies-title">

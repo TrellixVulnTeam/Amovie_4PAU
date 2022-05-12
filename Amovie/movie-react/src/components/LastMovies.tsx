@@ -2,6 +2,7 @@ import "../styles/lastMovies.scss";
 import moment from 'moment'
 import { Link } from 'react-router-dom';
 import useFetch from "../hooks/useFetch";
+import { useEffect, useState } from "react";
 
 type Movies = {
   id: number,
@@ -13,8 +14,10 @@ type Movies = {
 };
 
 export default function LastMovies() {
+  const [data, setData] = useState(null);
 
-const {data: movies, error, loading} = useFetch<Movies[]>("https://localhost:7063/api/movies/lastmovies")
+const {data: movies, error, loading} = useFetch<Movies[]>("http://localhost:7063/api/movies/lastmovies")
+
     return (
       <div className="container">
         <div className="movies-title">

@@ -1,53 +1,131 @@
-import * as React from 'react';
-import Container from '@mui/material/Container';
-import { Avatar, Box, Button, Checkbox, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import * as React from "react";
+import Container from "@mui/material/Container";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginSchema } from "../validations/loginValidation";
+import { useEffect, useState } from "react";
+import { Redirect } from "react-router-dom";
+import { UserContext } from "../providers/UserProvider";
 
 export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const [redirect, setRedirect] = useState(false);
+  const {user, setUser} = React.useContext(UserContext);
+  
+  type LoginType = {
+    email: string;
+    password: string;
   };
 
-  return (
-      <Container component="main" maxWidth="xs">
-        <Box sx={{ marginTop: 8, marginBottom: 8, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}></Avatar>
-          <Typography component="h1" variant="h5" sx={{ fontWeight: 'bold' }}>Sign in </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel control={<Checkbox value="remember" color="primary"/>}label="Remember me"/>
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}> Sign In </Button>
+ const methods = useForm<LoginType>({ resolver: yupResolver(loginSchema)});
+ 
+ const {
+  register,
+  handleSubmit,
+  formState: { errors },
+} = methods;
 
-            <Grid container>
-              <Grid item>
-                <Link to={"/signup"}> {"Don't have an account? Sign Up"} </Link>
-              </Grid>
+
+
+  const onSubmit = async (values: LoginType) => {
+    const url = "http://localhost:7063/api/login";
+    const data = {
+      email: values.email,
+      password: values.password,
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      var result = await response.json();
+      console.log("Succes:", JSON.stringify(result));
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    setUser({name: result.name})
+    setRedirect(true);
+  };
+
+
+
+  if (redirect) {
+    return <Redirect to="/" />;
+  }
+
+  return (
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          marginBottom: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "primary.main" }}></Avatar>
+        <Typography component="h1" variant="h5" sx={{ fontWeight: "bold" }}>
+          Sign In
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                id="email"
+                label="Email Address"
+                {...register("email", {})}
+              />
+              {errors.email && (
+                <Typography style={{ color: "#F95252" }}>
+                  * {errors.email.message}
+                </Typography>
+              )}
             </Grid>
-          </Box>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Password"
+                id="password1"
+                type="password"
+                {...register("password", {})}
+              />
+              {errors.password && (
+                <Typography style={{ color: "#F95252" }}>
+                  * {errors.password.message}
+                </Typography>
+              )}
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign In
+          </Button>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link to="/signup"> Don't have an account? Sign Up </Link>
+            </Grid>
+          </Grid>
         </Box>
-      </Container>
+      </Box>
+    </Container>
   );
 }

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { Pagination } from "@mui/material";
 import { useState } from "react";
+import AddNews from "./AddNews";
 
 type News = {
   id: number;
@@ -18,21 +19,15 @@ type NewsPage = {
   news: News[];
   currentPage: number;
   pages: number;
-};
+};    
 
 export default function AllNews() {
+  const [page, setPage] = useState(1);
+  const [toggle, setToggle] = useState(false);
 
-  const [page, setPage] = useState(1);    
-
-  const url = `https://localhost:7063/newspage/${page}?pageSize=${5}`;
+  const url = `http://localhost:7063/newspage/${page}?pageSize=${5}`;
 
   const { data, error, loading } = useFetch<NewsPage>(url);
-
-
-  // async function handleChange(event: any) {
-  //   var curr = event.target.value;
-  //   setPage(page+1);
-  // }
 
   return (
     <div>
@@ -41,18 +36,41 @@ export default function AllNews() {
           <p className="title">News</p>
 
           <div className="blue-line">
-
             <div> </div>
           </div>
-      <Pagination size="large" count={data?.pages} page={page} siblingCount={0} onChange={(_, page) => setPage(page)} />
 
+          <Pagination
+            size="large"
+            count={data?.pages}
+            page={page}
+            siblingCount={0}
+            onChange={(_, page) => setPage(page)}
+          />
+          <button onClick={() => setToggle(!toggle)}>
+            Toggle Add News
+          </button>
+          {toggle && (
+            <AddNews/>
+          )}
+          <div className="button container">
+            <Link to="/addnews">
+              <button>
+                <p>Add news</p>
+              </button>
+            </Link>
+          </div>
         </div>
-        { data?.news?.map((n) => ( 
+        {loading && <p>Loading data...</p>}
+        {data?.news?.map((n) => (
           <div className="container" key={n.id}>
             <div className="content-block">
               <Link to={`/news/${n.id}`}>
                 <div className="image-section">
                   <img src={n.image} alt={n.title} />
+                </div>
+                <div>
+                  <button>Update</button>
+                  <button>Delete</button>
                 </div>
               </Link>
               <div className="text-section">
@@ -69,6 +87,7 @@ export default function AllNews() {
             <hr className="line" />
           </div>
         ))}
+        {error && JSON.stringify(error)}
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ type News = {
 
 export default function NewsDetails() {
 
-  const url = ("https://localhost:7063/api/news/" + window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1))
+  const url = ("http://localhost:7063/api/news/" + window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1))
   const {
     data: news,
     error,

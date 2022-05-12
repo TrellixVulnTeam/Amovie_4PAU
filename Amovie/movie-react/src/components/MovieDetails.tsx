@@ -25,13 +25,13 @@ type Movie = {
 
 export default function MovieDetails() {
   const url =
-    "https://localhost:7063/api/movies/" +
+    "http://localhost:7063/api/movies/" +
     window.location.pathname.substring(
       window.location.pathname.lastIndexOf("/") + 1
     );
   const { data: movie, error, loading } = useFetch<Movie>(url);
   return (
-    <div className="container">
+    <div className="container" >
       {loading && <p>Loading data...</p>}
       <div className="single-block">
         <div className="image-block">
@@ -80,7 +80,7 @@ export default function MovieDetails() {
         </div>
         {movie && 
           movie?.reviews.map((review) => ( 
-            <div className="review">
+            <div className="review" key={review.user}>
               <div className="user">
                 <p>{review.user}</p>
                 <div>
@@ -100,3 +100,5 @@ export default function MovieDetails() {
     </div>
   );
 }
+
+

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Behaviour.Interfaces;
 using Entities.Models.MovieDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Amovie.Controllers

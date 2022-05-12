@@ -17,7 +17,7 @@ export default function LastNews() {
     data: news,
     error,
     loading,
-  } = useFetch<News[]>("https://localhost:7063/api/lastnews");
+  } = useFetch<News[]>("http://localhost:7063/api/lastnews");
   
   return (
     <div className="news-block">

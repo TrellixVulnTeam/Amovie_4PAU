@@ -54,8 +54,6 @@ namespace Behaviour.Services
 
         public async Task<PagedNewsDto> GetPagedNews(int page, int pageSize)
         {
-            //var pageResults = 2f;
-
             var pageCount = Math.Ceiling(_repository.GetAll().Count() / (float)pageSize);
 
             var news = _repository.GetAllWithIncludes(x => x.Author).AsQueryable()

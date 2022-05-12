@@ -34,7 +34,7 @@ export default class SimpleSlider extends Component {
           </div>
           <div>
             <div className="image-container">
-              <img src={image} alt="slider img" />
+              <img src={image} alt="slider movie img" />
               <div className="centered-text">
                 <p>Avengers Endgame</p>
               </div>

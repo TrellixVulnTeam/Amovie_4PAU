@@ -16,7 +16,7 @@ namespace Behaviour.Abstract
 
         public async Task Add(T entity)
         {
-             _context.Set<T>().AddAsync(entity);
+            await _context.Set<T>().AddAsync(entity);
         }
 
         public async Task<T> Get(int id)

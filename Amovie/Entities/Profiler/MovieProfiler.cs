@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entities.Entities;
+using Entities.Models.AuthorDto;
 using Entities.Models.MovieDto;
 using Entities.Models.NewsDto;
 using Entities.Models.ReviewDto;
@@ -38,7 +39,8 @@ namespace Entities.Profiler
             CreateMap<Review, AddReviewDto>()
                 .ReverseMap();
 
-
+            //Author
+            CreateMap<Author, AuthorDto>().ReverseMap();
         }
     }
 }

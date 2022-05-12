@@ -12,6 +12,7 @@ namespace Amovie.Configuration
             services.AddScoped<INewsService, NewsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<IAuthorService, AuthorService>();
 
             return services;
         }

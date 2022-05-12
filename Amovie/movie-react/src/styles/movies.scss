@@ -109,4 +109,29 @@
   display: inline-block;
 }
 
+@media only screen and (max-width: 900px) {
+  .container .title-block .title{
+    font-size: 28px;
+  }
+  .container .movies-block .movie .content .title-rating h2{
+    font-size: 18px;
+  }
+
+  .container .movies-container .movie .content .title-rating h2{
+    font-size: 18px;
+  }
+
+  .container .movies-container{
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media only screen and (max-width: 440px) {
+  .container .movies-container{
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
 
