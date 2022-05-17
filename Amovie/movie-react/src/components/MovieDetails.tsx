@@ -1,27 +1,7 @@
 import "../styles/moviedetails.scss";
 import moment from "moment";
 import useFetch from "../hooks/useFetch";
-
-type Review = {
-  user: string, 
-  date: string, 
-  content: string
-}
-
-type Movie = {
-  id: number;
-  title: string;
-  image: string;
-  description: string;
-  release: string;
-  rating: number;
-  duration: number;
-  country: string;
-  budget: number;
-  genres: string[];
-  actors: string[];
-  reviews: Review[];
-};
+import { MovieType } from "../Types/Types";
 
 export default function MovieDetails() {
   const url =
@@ -29,9 +9,9 @@ export default function MovieDetails() {
     window.location.pathname.substring(
       window.location.pathname.lastIndexOf("/") + 1
     );
-  const { data: movie, error, loading } = useFetch<Movie>(url);
+  const { data: movie, error, loading } = useFetch<MovieType>(url);
   return (
-    <div className="container" >
+    <div className="container">
       {loading && <p>Loading data...</p>}
       <div className="single-block">
         <div className="image-block">
@@ -63,8 +43,8 @@ export default function MovieDetails() {
 
             <div className="dates">
               <p>{movie?.country}</p>
-              <p>{movie?.genres}</p>
-              <p>{movie?.actors}Bruce</p>
+              <p>{movie?.genres.join(", ")}</p>
+              <p>{movie?.actors.join(", ")}</p>
               <p>${movie?.budget} mln</p>
             </div>
           </div>
@@ -78,8 +58,8 @@ export default function MovieDetails() {
             <p>Add review</p>
           </button>
         </div>
-        {movie && 
-          movie?.reviews.map((review) => ( 
+        {movie &&
+          movie?.reviews.map((review) => (
             <div className="review" key={review.user}>
               <div className="user">
                 <p>{review.user}</p>
@@ -89,16 +69,12 @@ export default function MovieDetails() {
                 </div>
               </div>
               <div className="text">
-                <p>
-                  {review.content}
-                </p>
+                <p>{review.content}</p>
               </div>
             </div>
-            ))} 
+          ))}
       </div>
       {error && JSON.stringify(error)}
     </div>
   );
 }
-
-

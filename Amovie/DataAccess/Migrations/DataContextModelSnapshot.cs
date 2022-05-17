@@ -17,7 +17,7 @@ namespace DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -68,13 +68,25 @@ namespace DataAccess.Migrations
                         {
                             Id = 2,
                             FirstName = "Tom",
-                            LastName = "Hollan"
+                            LastName = "Holland"
                         },
                         new
                         {
                             Id = 3,
                             FirstName = "Tony",
                             LastName = "Stark"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FirstName = "Mark",
+                            LastName = "Cruise"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FirstName = "Stephan",
+                            LastName = "Muller"
                         });
                 });
 
@@ -116,6 +128,18 @@ namespace DataAccess.Migrations
                             Id = 3,
                             FirstName = "Luckas",
                             LastName = "Francis"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FirstName = "Stephan",
+                            LastName = "Holh"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FirstName = "Mark",
+                            LastName = "Cruise"
                         });
                 });
 
@@ -150,6 +174,16 @@ namespace DataAccess.Migrations
                         {
                             Id = 3,
                             Name = "Drama"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Action"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Fantasy"
                         });
                 });
 
@@ -276,9 +310,38 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserRole")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 20,
+                            Email = "john@email.com",
+                            Name = "John",
+                            Password = "admin",
+                            UserRole = "admin"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Email = "tom@email.com",
+                            Name = "Tom",
+                            Password = "asdasd",
+                            UserRole = "user"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Email = "tony@email.com",
+                            Name = "Tony",
+                            Password = "asdasd",
+                            UserRole = "user"
+                        });
                 });
 
             modelBuilder.Entity("GenreMovie", b =>

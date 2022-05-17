@@ -24,7 +24,6 @@ namespace Entities.Profiler
                 o => o.MapFrom(m => m.Genres!.Select(m => m.Name)))
                 .ReverseMap();
 
-
             //news
             CreateMap<News, NewsDto>()
                 .ForMember(n => n.AuthorName,

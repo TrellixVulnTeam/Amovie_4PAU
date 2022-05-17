@@ -30,7 +30,7 @@ export default function useFetch<T = unknown>(url: string) {
     fetchPosts();
   }, [url]);
   
-  return ({data, loading, error});
+  return ({data,loading, error});
 }
 
 

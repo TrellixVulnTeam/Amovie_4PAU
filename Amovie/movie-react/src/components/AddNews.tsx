@@ -7,7 +7,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Redirect } from "react-router-dom";
 import { addNewsSchema } from "../validations/addNewsValidation";
@@ -19,28 +19,14 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 import useFetch from "../hooks/useFetch";
-
-type NewsType = {
-  title: string;
-  image: string;
-  content: string;
-  date: string;
-  authorId: number;
-};
-
-type AuthorType = {
-  id: number;
-  firstName: string;
-  lastName: string;
-};
+import { AuthorType, NewsType } from "../Types/Types";
 
 export default function AddNews() {
   const [redirect, setRedirect] = useState(false);
   const [dateValue, setDateValue] = useState<Date | null>(null);
 
   const url = `http://localhost:7063/api/Author/allauthors`;
-  const { data: authors, error, loading } = useFetch<AuthorType[]>(url);
-  console.log(authors);
+  const { data: authors } = useFetch<AuthorType[]>(url);
 
   const {
     register,
@@ -57,8 +43,6 @@ export default function AddNews() {
       date: moment(dateValue).format("YYYY-MM-DD"),
       authorId: values.authorId,
     };
-    console.log(data);
-
     try {
       await fetch(url, {
         method: "POST",
@@ -144,25 +128,20 @@ export default function AddNews() {
               </Typography>
             )}
           </Grid>
-          <Grid item xs={6}>
-            {/* <select {...register("authorId")}>
-              <option value="1">One</option>
-              <option value="2">Twho</option>
-              <option value="2">Three</option>
-            </select> */}
+          <Grid item xs={3}>
             <FormControl fullWidth>
-              <InputLabel variant="standard" htmlFor="uncontrolled-native">
-              </InputLabel>
+              <InputLabel
+                variant="standard"
+                htmlFor="uncontrolled-native"
+              ></InputLabel>
               <NativeSelect defaultValue={30} {...register("authorId")}>
                 {authors &&
                   authors?.map((author) => (
                     <option key={author.id} value={author.id}>
-                     {author.firstName}
+                      {author.firstName.concat(" ")}
+                      {author.lastName}
                     </option>
                   ))}
-                {/* <option value={1}>One</option>
-                <option value={2}>Two</option>
-                <option value={3}>Three</option> */}
               </NativeSelect>
             </FormControl>
             {errors.authorId && (

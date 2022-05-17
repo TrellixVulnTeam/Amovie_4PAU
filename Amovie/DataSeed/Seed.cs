@@ -24,8 +24,8 @@ namespace DataSeed
                 new Genre(){Id = 1, Name = "Comedy"},
                 new Genre(){Id = 2, Name = "Horror"},
                 new Genre(){Id = 3, Name = "Drama"},
-                new Genre(){Id = 3, Name = "Action"},
-                new Genre(){Id = 3, Name = "Fantasy"},
+                new Genre(){Id = 4, Name = "Action"},
+                new Genre(){Id = 5, Name = "Fantasy"},
             });
         }
 
@@ -38,8 +38,16 @@ namespace DataSeed
                 new Author(){Id = 3, FirstName = "Luckas", LastName = "Francis"},
                 new Author() { Id = 4, FirstName = "Stephan", LastName = "Holh" },
                 new Author() { Id = 5, FirstName = "Mark", LastName = "Cruise" },
+            });
+        }
 
-
+        public static void SeedUsers(this ModelBuilder builder)
+        {
+            builder.Entity<User>().HasData(new List<User>()
+            {
+                new User() { Id = 20, Name = "John", Email="john@email.com", Password="admin", UserRole="admin" },
+                new User() { Id = 21, Name = "Tom", Email="tom@email.com", Password="asdasd", UserRole="user" },
+                new User() { Id = 22, Name = "Tony", Email="tony@email.com", Password="asdasd", UserRole="user" },
             });
         }
     }

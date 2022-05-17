@@ -10,7 +10,6 @@ namespace Amovie.Configuration
         {
             builder.ToTable("Actors");
 
-
             builder.Property(x => x.FirstName)
                 .IsRequired()
                 .HasMaxLength(20);

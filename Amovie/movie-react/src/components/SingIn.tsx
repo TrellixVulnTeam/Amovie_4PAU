@@ -12,28 +12,22 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../validations/loginValidation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { UserContext } from "../providers/UserProvider";
+import { LoginType } from "../Types/Types";
 
 export default function SignIn() {
   const [redirect, setRedirect] = useState(false);
-  const {user, setUser} = React.useContext(UserContext);
+  const { user, setUser } = React.useContext(UserContext);
   
-  type LoginType = {
-    email: string;
-    password: string;
-  };
+  const methods = useForm<LoginType>({ resolver: yupResolver(loginSchema) });
 
- const methods = useForm<LoginType>({ resolver: yupResolver(loginSchema)});
- 
- const {
-  register,
-  handleSubmit,
-  formState: { errors },
-} = methods;
-
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = methods;
 
   const onSubmit = async (values: LoginType) => {
     const url = "http://localhost:7063/api/login";
@@ -56,11 +50,28 @@ export default function SignIn() {
     } catch (error) {
       console.error("Error:", error);
     }
-    setUser({name: result.name})
+    //   function parseJwt (token:string) {
+    //     var atob = require('atob');
+    //     var base64Url = token.split('.')[1];
+    //     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    //     var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c:string) {
+    //         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    //     }).join(''));
+
+    //     return jsonPayload;
+    // };
+    //  var jwt = require("jsonwebtoken");
+    //   const jwtToken = result.jwt;
+    //   var decode1 = jwt.decode(jwtToken);
+
+    //   console.log("decode "+ decode1);
+
+    localStorage.setItem('name', result.user.name);
+    localStorage.setItem('role', result.user.userRole);
+
+    setUser({ name: result.user.name, role: result.user.userRole });
     setRedirect(true);
   };
-
-
 
   if (redirect) {
     return <Redirect to="/" />;

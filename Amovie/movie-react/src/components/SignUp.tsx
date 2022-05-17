@@ -13,17 +13,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "../validations/registerValidation";
 import { Redirect } from "react-router-dom";
 import { useState } from "react";
-
-type RegisterType = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+import { RegisterType } from "../Types/Types";
 
 export default function SignUp() {
   const [redirect, setRedirect] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -83,15 +76,6 @@ export default function SignUp() {
                 id="name"
                 label="Name"
                 {...register("name", {
-                  // minLength: {
-                  //   value: 3,
-                  //   message: "Name must containt at least 3 characters",
-                  // },
-                  // maxLength: {
-                  //   value: 20,
-                  //   message: "Name must contain at most 20 characters",
-                  // },
-                  // required: "Name is required",
                 })}
               />
               {errors.name && (

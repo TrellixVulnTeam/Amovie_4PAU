@@ -21,10 +21,10 @@ namespace DataAccess.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(DataContext)));
-
             modelBuilder.SeedActors();
             modelBuilder.SeedGenres();
             modelBuilder.SeedAuthors();
+            modelBuilder.SeedUsers(); 
         }
     }
 }

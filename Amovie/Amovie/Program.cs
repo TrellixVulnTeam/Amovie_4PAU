@@ -1,6 +1,4 @@
-using Amovie;
 using Amovie.Configuration;
-using Amovie.Helpers;
 using Behaviour.Abstract;
 using Behaviour.Interfaces;
 using DataAccess.Data;
@@ -27,8 +25,10 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-}); 
-
+        
+});
+var AppName = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AppSettings")["SecretKey"];
+//Console.WriteLine(AppName);
 builder.Services.AddControllers();
 
 //add mapper
@@ -36,8 +36,6 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(typeof(MovieProfiler));
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
-
-builder.Services.AddScoped<JwtService>();
 
 builder.Services.RegisterControllers();
 

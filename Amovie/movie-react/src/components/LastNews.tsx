@@ -1,24 +1,16 @@
-import "../styles/lastNews.scss";
+// import "../styles/lastNews.scss";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
-
-type News = {
-  id: number;
-  title: string;
-  image: string;
-  content: string;
-  date: string;
-  authorName: string
-};
+import { NewsType } from "../Types/Types";
 
 export default function LastNews() {
   const {
     data: news,
     error,
     loading,
-  } = useFetch<News[]>("http://localhost:7063/api/lastnews");
-  
+  } = useFetch<NewsType[]>("http://localhost:7063/api/lastnews");
+  console.log("News "+news);
   return (
     <div className="news-block">
       <div className="title-block">

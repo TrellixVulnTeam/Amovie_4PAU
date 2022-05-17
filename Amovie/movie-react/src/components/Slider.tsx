@@ -2,7 +2,6 @@ import { Component } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import image from "../images/Slider.png";
 import { Link } from 'react-router-dom';
 
 import "../styles/slider.scss"
@@ -21,7 +20,7 @@ export default class SimpleSlider extends Component {
         <Slider {...settings}>
           <div>
             <div className="image-container">
-              <img src={image} alt="slider" />
+            <img src={process.env.PUBLIC_URL + '/ImagesUI/Slider.png'} alt="slider"/>
               <div className="centered-text">
                 <p>Avengers Final</p>
               </div>
@@ -34,7 +33,7 @@ export default class SimpleSlider extends Component {
           </div>
           <div>
             <div className="image-container">
-              <img src={image} alt="slider movie img" />
+            <img src={process.env.PUBLIC_URL + '/ImagesUI/Slider.png'} alt="slider"/>
               <div className="centered-text">
                 <p>Avengers Endgame</p>
               </div>

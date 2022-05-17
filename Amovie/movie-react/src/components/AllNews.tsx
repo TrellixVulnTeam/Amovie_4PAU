@@ -4,30 +4,33 @@ import { Link } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { Pagination } from "@mui/material";
 import { useState } from "react";
-import AddNews from "./AddNews";
-
-type News = {
-  id: number;
-  title: string;
-  image: string;
-  content: string;
-  date: string;
-  authorName: string;
-};
-
-type NewsPage = {
-  news: News[];
-  currentPage: number;
-  pages: number;
-};    
+import { NewsPage } from "../Types/Types";
+import deleteNews from "./deleteNews";
+import UpdateNews from "./UpdateNews";
 
 export default function AllNews() {
   const [page, setPage] = useState(1);
-  const [toggle, setToggle] = useState(false);
 
   const url = `http://localhost:7063/newspage/${page}?pageSize=${5}`;
 
   const { data, error, loading } = useFetch<NewsPage>(url);
+
+  let userRole = localStorage.getItem("role");
+
+  let addNews;
+  if (userRole === "admin") {
+    addNews = (
+      <div className="button container">
+        <Link to="/addnews">
+          <button>
+            <p>Add news</p>
+          </button>
+        </Link>
+      </div>
+    );
+  } else {
+    addNews = "";
+  }
 
   return (
     <div>
@@ -46,33 +49,23 @@ export default function AllNews() {
             siblingCount={0}
             onChange={(_, page) => setPage(page)}
           />
-          <button onClick={() => setToggle(!toggle)}>
-            Toggle Add News
-          </button>
-          {toggle && (
-            <AddNews/>
-          )}
-          <div className="button container">
-            <Link to="/addnews">
-              <button>
-                <p>Add news</p>
-              </button>
-            </Link>
-          </div>
+          {addNews}
         </div>
         {loading && <p>Loading data...</p>}
         {data?.news?.map((n) => (
           <div className="container" key={n.id}>
             <div className="content-block">
-              <Link to={`/news/${n.id}`}>
-                <div className="image-section">
-                  <img src={n.image} alt={n.title} />
-                </div>
-                <div>
-                  <button>Update</button>
-                  <button>Delete</button>
-                </div>
-              </Link>
+              <div>
+                <Link to={`/news/${n.id}`}>
+                  <div className="image-section">
+                    <img src={n.image} alt={n.title} />
+                  </div>
+                </Link>
+                  <div>
+                    <button><Link to={`/updatenews/${n.id}`}>Update</Link></button>
+                    <button onClick={() => deleteNews(n.id)}>Delete</button>
+                  </div>
+              </div>
               <div className="text-section">
                 <h2 className="title">{n.title}</h2>
                 <p className="text">{n.content}</p>
@@ -92,3 +85,5 @@ export default function AllNews() {
     </div>
   );
 }
+
+

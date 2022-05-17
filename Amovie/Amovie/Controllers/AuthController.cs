@@ -1,4 +1,4 @@
-﻿using Amovie.Helpers;
+﻿
 using Behaviour.Interfaces;
 using Entities.Entities;
 using Entities.Models.UserDto;
@@ -10,12 +10,10 @@ namespace Amovie.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IUserService _repository;
-        private readonly JwtService _jwtService;
-        public AuthController(IUserService repository, JwtService jwtService)
+        private readonly IUserService _userService;
+        public AuthController(IUserService repository)
         {
-            _repository = repository;
-            _jwtService = jwtService;
+            _userService = repository;
         }
 
         [HttpPost("register")]
@@ -25,30 +23,31 @@ namespace Amovie.Controllers
             {
                 Name = dto.Name,
                 Email = dto.Email,
-                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password)
+                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                UserRole = "user"
             };
 
-            _repository.Create(user);
+            await _userService.Create(user);
 
             return Created("succes", user);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto dto)
+        public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            var user = _repository.GetByEmail(dto.Email);
+            var user = await _userService.GetByEmail(loginDto.Email);
 
             if (user == null)
             {
                 return BadRequest("Invalid credentials!");
             }
 
-            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
+            if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password))
             {
                 return BadRequest("Invalid credentials!");
             }
 
-            var jwt = _jwtService.Generate(user.Id);
+            var jwt = await _userService.Generate(user);
 
             Response.Cookies.Append("jwt", jwt, new CookieOptions
             {
@@ -57,23 +56,22 @@ namespace Amovie.Controllers
 
             return Ok(new
             {
-                jwt
+                jwt, user
             });
         }
 
         [HttpGet("user")]
         public async Task<IActionResult> User()
         {
-
             try
             {
                 var jwt = Request.Cookies["jwt"];
 
-                var token = _jwtService.Verify(jwt);
+                var token = await _userService.Verify(jwt);
 
                 int userId = int.Parse(token.Issuer);
 
-                var user = _repository.GetById(userId);
+                var user = await _userService.GetById(userId);
 
                 return Ok(user);
             }
@@ -82,7 +80,6 @@ namespace Amovie.Controllers
             {
                 return Unauthorized();
             }
-          
         }
 
         [HttpPost("logout")]

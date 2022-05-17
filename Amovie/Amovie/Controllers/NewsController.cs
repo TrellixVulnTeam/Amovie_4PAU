@@ -47,7 +47,7 @@ namespace Amovie.Controllers
             await _newsService.AddNews(newsDto);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("deletenews/{id}")]
         public async Task Delete(int id)
         {
            await _newsService.DeleteNews(id);

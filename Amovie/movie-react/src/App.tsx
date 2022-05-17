@@ -12,9 +12,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import "./styles/main.scss";
 import SignIn from "./components/SingIn";
 import SignUp from "./components/SignUp";
-import { useContext, useEffect, useState } from "react";
-import UserProvider, { UserContext } from "./providers/UserProvider";
 import AddNews from "./components/AddNews";
+import UpdateNews from "./components/UpdateNews";
 
 function App() {
   // const {user, setUser} = useContext(UserContext);
@@ -34,17 +33,16 @@ function App() {
   return (
     <div>
       <Router>
-        <UserProvider>
-          <NavbarComponent />
-          <Route exact path="/" component={Home} />
-          <Route exact path="/movies" component={Movies} />
-          <Route exact path="/news" component={News} />
-          <Route path="/movies/:id" component={SingleMovie} />
-          <Route path="/news/:id" component={SingleNews} />
-          <Route path="/addnews" component={AddNews} />
-          <Route path="/signin" component={SignIn} />
-          <Route path="/signup" component={SignUp} />
-        </UserProvider>
+        <NavbarComponent />
+        <Route exact path="/" component={Home} />
+        <Route exact path="/movies" component={Movies} />
+        <Route exact path="/news" component={News} />
+        <Route path="/movies/:id" component={SingleMovie} />
+        <Route path="/news/:id" component={SingleNews} />
+        <Route path="/addnews" component={AddNews} />
+        <Route path="/updatenews/:id" component={UpdateNews} />
+        <Route path="/signin" component={SignIn} />
+        <Route path="/signup" component={SignUp} />
       </Router>
 
       <Footer />

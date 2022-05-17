@@ -1,7 +1,6 @@
 import "../styles/navbar.scss";
-import logo from "../images/Logo.svg";
 import { Link } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
   AppBar,
   Box,
@@ -31,6 +30,7 @@ const ResponsiveAppBar = () => {
   };
 
   const logout = () => {
+
     const url = "http://localhost:7063/api/logout";
     fetch(url, {
       method: "POST",
@@ -39,11 +39,13 @@ const ResponsiveAppBar = () => {
       },
       credentials: "include",
     });
-    
-    setUser({ name: ""});
+    window.localStorage.removeItem("name");
+    window.localStorage.removeItem("user");
+    setUser({ name: "", role: "" });
   };
 
   let menu;
+  let currentUser = localStorage.getItem('name');
   if (user?.name === "") {
     menu = (
       <Box>
@@ -56,10 +58,9 @@ const ResponsiveAppBar = () => {
       </Box>
     );
   } else {
-   
     menu = (
       <Box>
-        {/* <Button>Hello {user?.name}</Button> */}
+        <Button>Hello {currentUser}</Button>
         <Link to="/signin" onClick={logout}>
           <Button>Logout</Button>
         </Link>
@@ -78,7 +79,7 @@ const ResponsiveAppBar = () => {
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
           >
             <Link to="/">
-              <img src={logo} alt="logo" />
+            <img src={process.env.PUBLIC_URL + '/ImagesUI/Logo.svg'} alt="logo"/>
             </Link>
           </Typography>
 
@@ -108,12 +109,12 @@ const ResponsiveAppBar = () => {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
             >
-               <MenuItem onClick={handleCloseNavMenu}>
+              <MenuItem onClick={handleCloseNavMenu}>
                 <Link to="/movies">
                   <Button>Movies</Button>
                 </Link>
-                </MenuItem>
-                <MenuItem onClick={handleCloseNavMenu}>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
                 <Link to="/news">
                   <Button>News</Button>
                 </Link>
@@ -123,8 +124,8 @@ const ResponsiveAppBar = () => {
                 <Link to="/signin">
                   <Button>Sign In</Button>
                 </Link>
-                </MenuItem>
-                <MenuItem onClick={handleCloseNavMenu}>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
                 <Link to="/signup">
                   <Button>Sign Up</Button>
                 </Link>
@@ -138,7 +139,7 @@ const ResponsiveAppBar = () => {
             sx={{ flexGrow: 2, display: { xs: "flex", md: "none" } }}
           >
             <Link to="/">
-              <img src={logo} alt="logo" />
+            <img src={process.env.PUBLIC_URL + '/ImagesUI/Logo.svg'} alt="logo"/>
             </Link>
           </Typography>
           <Box className="box">
