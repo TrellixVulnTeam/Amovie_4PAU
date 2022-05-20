@@ -12,6 +12,8 @@
   .logo{
     img{
       height: 70px;
+
+     
     }
   }
 
@@ -21,10 +23,25 @@
       margin: 0;
       font-family: $montserrat;
       font-weight: 600;
-      color: $second-color;
+
+      a{
+        text-decoration: none;
+        color: $second-color;
+        &:hover{
+          color: #0071BA;
+        }
+
+      }
     }
 
     display: flex;
     gap: 40px;
+  }
+}
+
+@media only screen and (max-width: 900px){
+  .footer-block .pages{
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }

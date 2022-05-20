@@ -15,9 +15,6 @@ namespace Behaviour.Repositories
         private readonly DataContext _context;
         private readonly string _secureKey;
 
-        //private string secureKey = "this string is for secure key";
-
-
         public UserService(DataContext context)
         {
             _context = context;

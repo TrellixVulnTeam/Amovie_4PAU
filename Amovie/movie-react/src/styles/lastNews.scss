@@ -140,6 +140,13 @@
 }
 }
 
+.buttons{
+  a{
+    text-decoration: none;
+  }
+}
+
+
 .css-wjh20t-MuiPagination-ul{
   justify-content: center;
   margin: 20px 0!important;
@@ -167,5 +174,14 @@
 
   .container .text-section .title{
     font-size: 18px;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .container .content-block{
+    display: block;
+  }
+  .container .text-section .title{
+    margin-top: 15px;
   }
 }

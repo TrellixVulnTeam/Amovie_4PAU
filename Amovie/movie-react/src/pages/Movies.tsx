@@ -1,5 +1,4 @@
-import AllMovies from "../components/AllMovies";
-
+import AllMovies from "../components/MovieComponent/AllMovies";
 export default function Movies(){
   return(
     <div>

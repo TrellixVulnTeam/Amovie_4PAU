@@ -1,6 +1,6 @@
-import SimpleSlider from "../components/Slider";
-import LatestMovies from "../components/LastMovies";
-import LastNews from "../components/LastNews";
+import SimpleSlider from "../components/SliderComponent/Slider";
+import LatestMovies from "../components/MovieComponent/LastMovies";
+import LastNews from "../components/NewsComponent/LastNews";
 
 export default function Home() {
   return (

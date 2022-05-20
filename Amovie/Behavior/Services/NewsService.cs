@@ -26,10 +26,11 @@ namespace Behaviour.Services
 
         public async Task<List<NewsDto>> GetLast()
         {
+            var allNews = await _repository.GetAll();
             var lastNews =  _repository.GetAllWithIncludes(x => x.Author).AsQueryable()
             .Skip(Math
-            .Max(0, _repository.GetAll()
-            .Count() - 6));
+            .Max(0, allNews
+            .Count() - 3));
 
             var newsDto = _mapper.Map<List<NewsDto>>(lastNews);
             return newsDto;
@@ -51,10 +52,10 @@ namespace Behaviour.Services
             }
         }
 
-
         public async Task<PagedNewsDto> GetPagedNews(int page, int pageSize)
         {
-            var pageCount = Math.Ceiling(_repository.GetAll().Count() / (float)pageSize);
+            var allNews = await _repository.GetAll();
+            var pageCount = Math.Ceiling(allNews.Count() / (float)pageSize);
 
             var news = _repository.GetAllWithIncludes(x => x.Author).AsQueryable()
                 .Skip((page - 1) * pageSize)
@@ -103,7 +104,8 @@ namespace Behaviour.Services
 
         public async Task DeleteNews(int id)
         {
-            var news = _repository.GetAll().FirstOrDefault(m => m.Id == id);
+            var allNews = await _repository.GetAll();
+            var news = allNews.FirstOrDefault(m => m.Id == id);
 
             if (news == null)
             {

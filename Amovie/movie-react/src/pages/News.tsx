@@ -1,5 +1,5 @@
 
-import AllNews from "../components/AllNews";
+import AllNews from "../components/NewsComponent/AllNews";
 
 
 export default function News(){

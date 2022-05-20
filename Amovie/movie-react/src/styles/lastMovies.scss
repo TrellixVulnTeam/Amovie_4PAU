@@ -101,5 +101,6 @@
 @media only screen and (max-width: 440px) {
   .container .movies-block{
     grid-template-columns: 1fr;
+    gap: 15px;
   }
 }

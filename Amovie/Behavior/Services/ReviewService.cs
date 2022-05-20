@@ -31,7 +31,8 @@ namespace Behaviour.Services
 
         public async Task DeleteReview(int id)
         {
-            var review = _repository.GetAll().FirstOrDefault(m => m.Id == id);
+            var reviews = await _repository.GetAll();
+            var review = reviews.FirstOrDefault(m => m.Id == id);
 
             if (review == null)
             {

@@ -20,12 +20,12 @@ namespace Behaviour.Services
             _mapper = mapper;
         }
 
-        public Task<List<AuthorDto>> GetAll()
+        public async Task<List<AuthorDto>> GetAll()
         {
-            var authors = _repository.GetAll();
+            var authors = await _repository.GetAll();
             var authorsDto = _mapper.Map<List<AuthorDto>>(authors);
 
-            return Task.FromResult(authorsDto);
+            return authorsDto;
         }
     }
 }

@@ -18,7 +18,23 @@ namespace Amovie.Controllers
         [HttpGet("allmovies")]
         public async Task<ActionResult<List<MoviesDto>>> Get()
         {
-            return Ok (await _movieService.GetAll());
+            try
+            {
+                var result = await _movieService.GetAll();
+                if(result != null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         //Get last 6 Movies
@@ -31,11 +47,27 @@ namespace Amovie.Controllers
 
         //Get Movie by ID
         [HttpGet("{id}")]
-        public async Task<SingleMovieDto> GetMovie(int id)
+        public async Task<ActionResult<SingleMovieDto>> GetMovie(int id)
         {
-            return await _movieService.GetMovie(id);
+            try
+            {
+                var result = await _movieService.GetMovie(id);
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
+        //Add Movie
         [HttpPost("/create")]
         public async Task<ActionResult> AddMovieWithGenre(AddMovieDto movieDto)
         {
@@ -43,13 +75,14 @@ namespace Amovie.Controllers
             return Ok();
         }
 
+        //Update Movie
         [HttpPut("{id}")]
         public async Task Update(AddMovieDto movieDto, int id)
         {
             await _movieService.UpdateMovie(movieDto, id);
         }
 
-        ////Delete Movie
+        //Delete Movie
         [HttpDelete("{id}")]
         public async Task DeleteMovie(int id)
         {
@@ -57,12 +90,28 @@ namespace Amovie.Controllers
         }
 
         //GetMovies with page
-        [HttpGet("/movies/paged")]
+        [HttpGet("/pagedmovies/{page}")]
         public async Task<ActionResult<PagedMovieDto>> GetMovies(int page = 1, int pageSize = 2)
         {
             var pagedMovies = await _movieService.GetPagedMovies(page, pageSize);
 
             return Ok(pagedMovies);
+        }
+
+        //Filter movies by title
+        [HttpGet("/movies/filter")]
+        public async Task<ActionResult<MoviesDto>> GetFilterMovies(string title)
+        {
+            var filterMovies = await _movieService.FilterMovies(title);
+            return Ok(filterMovies);
+        }
+
+        //Sort movies by rating
+        [HttpGet("/movies/sort")]
+        public async Task<ActionResult<MoviesDto>> GetSortedMovies(string sort)
+        {
+            var sortedMovies = await _movieService.SortMovies(sort);
+            return Ok(sortedMovies);
         }
     }
 }

@@ -9,7 +9,6 @@ namespace Entities.Models.ReviewDto
     public class AddReviewDto
     {
         public string User { get; set; }
-        public DateTime Date { get; set; }
         public string Content { get; set; }
         public int? MovieId { get; set; }
     }

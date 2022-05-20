@@ -26,7 +26,8 @@ export type NewsPage = {
   pages: number;
 };
 
-type Review = {
+export type Review = {
+  id:number,
   user: string, 
   date: string, 
   content: string
@@ -46,6 +47,13 @@ export type MovieType = {
   actors: string[];
   reviews: Review[];
 };
+
+export type MoviesPage = {
+  movies: MovieType[];
+  currentPage: number;
+  pages: number;
+};
+
 
 export type LastMoviesType = {
   id: number,

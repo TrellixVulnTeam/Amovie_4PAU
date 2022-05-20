@@ -9,7 +9,6 @@ namespace Behaviour.Services
 {
     public class MovieService : IMovieService
     {
-
         private readonly IRepository<Movie> _repository;
         private readonly IMapper _mapper;
         private readonly DataContext _context;
@@ -21,7 +20,7 @@ namespace Behaviour.Services
         }
         public async Task<List<MoviesDto>> GetAll()
         {
-            var movies = _repository.GetAll();
+            var movies = await _repository.GetAll();
 
             var moviesDto = _mapper.Map<List<MoviesDto>>(movies);
 
@@ -30,9 +29,10 @@ namespace Behaviour.Services
 
         public async Task<List<LastMovieDto>> GetLast()
         {
-            var lastMovies = _repository.GetAll()
+            var allMovies = await _repository.GetAll();
+            var lastMovies = allMovies
             .Skip(Math
-            .Max(0, _repository.GetAll()
+            .Max(0, allMovies
             .Count() - 6));
 
             var moviesDto = _mapper.Map<List<LastMovieDto>>(lastMovies);
@@ -43,7 +43,7 @@ namespace Behaviour.Services
         public async Task<SingleMovieDto> GetMovie(int id)
         {
             var movie = await _repository.GetByIdWithIncludes(id, x => x.Genres, x => x.Actors, x => x.Reviews);
-            
+
             var movieDto = _mapper.Map<SingleMovieDto>(movie);
 
             if (movie == null)
@@ -55,7 +55,7 @@ namespace Behaviour.Services
                 return movieDto;
             }
         }
-       
+       //Add Movie
         public async Task AddMovie(AddMovieDto movieDto)
         {
             var genres = await _context.Genres.Where(x => movieDto.GenreId.Contains(x.Id)).ToListAsync();
@@ -69,6 +69,7 @@ namespace Behaviour.Services
             await _repository.SaveChangesAsync();
         }
 
+        //Update Movie
         public async Task UpdateMovie(AddMovieDto movieDto, int id)
         {
             var genres = await _context.Genres.Where(x => movieDto.GenreId.Contains(x.Id)).ToListAsync();
@@ -82,13 +83,14 @@ namespace Behaviour.Services
 
             await _repository.Update(movie);
             await _repository.SaveChangesAsync();
-
         }
 
+        //Delete Movie
         public async Task DeleteMovie(int id)
         {
-            var movie = _repository.GetAll().FirstOrDefault(m => m.Id == id);
+            var allMovies = await _repository.GetAll();
 
+            var movie = allMovies.FirstOrDefault(m => m.Id == id);
 
             if (movie == null)
             {
@@ -101,13 +103,13 @@ namespace Behaviour.Services
             }
         }
 
+        //Get paged Movie
         public async Task<PagedMovieDto> GetPagedMovies(int page, int pageSize)
         {
-            //var pageResults = 2f;
+            var allMovies = await _repository.GetAll();
+            var pageCount = Math.Ceiling(allMovies.Count() / (float)pageSize);
 
-            var pageCount = Math.Ceiling(_repository.GetAll().Count() / (float)pageSize);
-
-            var movies = _repository.GetAll()
+            var movies = allMovies.AsQueryable()
                 .Skip((page - 1) * (int)pageSize)
                 .Take((int)pageSize);
 
@@ -120,6 +122,31 @@ namespace Behaviour.Services
                 Pages = (int)pageCount
             };
             return response;
+        }
+            
+        //Filter movie
+        public async Task<List<MoviesDto>> FilterMovies(string title)
+        {
+            var allMovies = await _repository.GetAll();
+            var filterMovies = allMovies.Where(x => x.Title.ToLower().Contains(title.ToLower()));
+
+            var filterMoviesDto = _mapper.Map<List<MoviesDto>>(filterMovies);
+            return filterMoviesDto;
+        }
+
+        public async Task<List<MoviesDto>> SortMovies(string sort)
+        {
+            var movies = await _repository.GetAll();
+            if(sort == "asc")
+            {
+                movies = movies.OrderBy(x => x.Rating).ToList();
+            } 
+            else if(sort == "desc")
+            {
+                movies = movies.OrderByDescending(x => x.Rating).ToList();
+            }
+            var sortedMoviesDto = _mapper.Map<List<MoviesDto>>(movies);
+            return sortedMoviesDto;
         }
     }
 }

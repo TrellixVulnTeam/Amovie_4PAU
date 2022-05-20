@@ -13,9 +13,5 @@ export const addNewsSchema = yup.object({
     .max(1000, "Content must containt at most 1000 characters"),
   date: yup
   .string()
-  .default("2022-01-01"),
-  authorId: yup
-    .number()
-    .default(1)
-    .typeError("Author id must be a number"),
+  .default("2022-01-01")
 });

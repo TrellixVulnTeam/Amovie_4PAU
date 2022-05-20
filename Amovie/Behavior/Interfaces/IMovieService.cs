@@ -1,9 +1,5 @@
 ﻿using Entities.Models.MovieDto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Behaviour.Interfaces
 {
@@ -15,6 +11,8 @@ namespace Behaviour.Interfaces
         Task AddMovie(AddMovieDto movie);
         Task UpdateMovie(AddMovieDto movie, int id);
         Task DeleteMovie(int id);
+        Task<List<MoviesDto>> FilterMovies(string title);
+        Task<List<MoviesDto>> SortMovies(string sort);
         Task<PagedMovieDto> GetPagedMovies(int page, int pageSize);
     }
 }

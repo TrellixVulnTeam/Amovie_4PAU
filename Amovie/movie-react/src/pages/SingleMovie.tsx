@@ -1,5 +1,5 @@
 
-import MovieDetails from "../components/MovieDetails";
+import MovieDetails from "../components/MovieComponent/MovieDetails";
 
 export default function SingleMovie(){
   return(

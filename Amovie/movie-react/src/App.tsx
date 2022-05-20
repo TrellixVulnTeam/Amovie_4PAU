@@ -1,5 +1,5 @@
-import NavbarComponent from "./components/Navbar";
-import Footer from "./components/Footer";
+import NavbarComponent from "./components/NavComponent/Navbar";
+import Footer from "./components/FooterComponent/Footer";
 import Home from "./pages/Home";
 import Movies from "./pages/Movies";
 import News from "./pages/News";
@@ -10,10 +10,10 @@ import { Route } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import "./styles/main.scss";
-import SignIn from "./components/SingIn";
-import SignUp from "./components/SignUp";
-import AddNews from "./components/AddNews";
-import UpdateNews from "./components/UpdateNews";
+import SignIn from "./components/AuthComponents/SingIn";
+import SignUp from "./components/AuthComponents/SignUp";
+import AddNews from "./components/NewsComponent/AddNews";
+import UpdateNews from "./components/NewsComponent/UpdateNews";
 
 function App() {
   // const {user, setUser} = useContext(UserContext);
@@ -43,9 +43,8 @@ function App() {
         <Route path="/updatenews/:id" component={UpdateNews} />
         <Route path="/signin" component={SignIn} />
         <Route path="/signup" component={SignUp} />
+        <Footer />
       </Router>
-
-      <Footer />
     </div>
   );
 }

@@ -1,36 +1,41 @@
 import { useEffect, useState } from "react";
-import { isJson } from "../components/LastNews";
 
 export default function useFetch<T = unknown>(url: string) {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [fetchData, setFetchData] = useState(false);
 
+  const refetch = () => {
+    setFetchData(true);
+  }
 
-  useEffect(() =>{
-    async function fetchPosts(){
+  useEffect(() => {
+    async function fetchPosts() {
       const response = await fetch(url);
       setLoading(false);
-      let result;
-      if(isJson(response)){
-       result = await response.json();
+      var result;
+      if (isJson(response)) {
+        result = await response.json();
       }
-      if(response.status === 404){
-        result = {error404: 'Resourse not found'};
-      } else{
-        result = result || {error: "Somthing went wrong"};
+      if (response.status === 404) {
+        result = { error404: "Resourse not found" };
+      } else {
+        result = result || { error: "Somthing went wrong" };
       }
 
-      if(response.status >= 200 && response.status < 300){
+      if (response.status >= 200 && response.status < 300) {
         setData(result);
-      } else{
+      } else {
         setError(result);
       }
     }
     fetchPosts();
   }, [url]);
-  
-  return ({data,loading, error});
+
+  return { data, loading, error};
 }
 
-
+function isJson(response: Response) {
+  return response.headers.get("Content-type")?.includes("json");
+}
